@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sharing } from '../data/sharing';
+import '../styles/case.css';
+
+const toc = [
+  { id: 'trigger', label: sharing.trigger.heading },
+  ...sharing.activities.map((a) => ({ id: a.slug, label: a.title })),
+  { id: 'insight', label: '의미' },
+];
+---
+
+<BaseLayout title={`${sharing.title} · 김치운`} description={sharing.oneLiner}>
+  <article class="case">
+    <div class="case__progress" aria-hidden="true">
+      <span data-progress></span>
+    </div>
+
+    <header class="case__hero">
+      <a class="case__back" href="/#sharing">← Home</a>
+      <div class="case__media">
+        <img
+          src="/sharing/hero.png"
+          alt=""
+          width="1600"
+          height="900"
+          loading="eager"
+          decoding="async"
+          style="view-transition-name: sharing-hero"
+        />
+      </div>
+      <div class="case__intro case-wrap">
+        <p class="meta">Sharing · Knowledge transfer</p>
+        <h1 class="case__title">{sharing.title}</h1>
+        <p class="case__lead">{sharing.oneLiner}</p>
+      </div>
+    </header>
+
+    <div class="case__layout case-wrap">
+      <nav class="toc" aria-label="목차">
+        <p class="toc__label">Contents</p>
+        <ol>
+          {
+            toc.map((item) => (
+              <li>
+                <a href={`#${item.id}`}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="case__main">
+        <section class="block" id="trigger" aria-label={sharing.trigger.heading}>
+          <div class="block__grid">
+            <h2 class="block__h">{sharing.trigger.heading}</h2>
+            <div>
+              {sharing.trigger.body.map((p) => <p class="block__p">{p}</p>)}
+              <p class="block__q">{sharing.trigger.question}</p>
+            </div>
+          </div>
+        </section>
+
+        {
+          sharing.activities.map((activity, i) => (
+            <>
+              <div class="break" aria-hidden="true">
+                <img
+                  src={
+                    activity.slug === 'mentoring'
+                      ? '/sharing/mentoring.png'
+                      : '/sharing/conference.png'
+                  }
+                  alt=""
+                  width="1600"
+                  height="900"
+                  loading="lazy"
+                />
+              </div>
+              <section class="block" id={activity.slug} aria-label={activity.title}>
+                <div class="block__grid">
+                  <h2 class="block__h">{activity.title}</h2>
+                  <div>
+                    <p class="block__status">{activity.status}</p>
+                    <p class="block__p">{activity.summary}</p>
+                    {'href' in activity && activity.href ? (
+                      <p class="block__p">
+                        <a
+                          class="text-link"
+                          href={activity.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {activity.hrefLabel ?? '행사 페이지'} →
+                        </a>
+                      </p>
+                    ) : null}
+                    <ul class="work__list">
+                      {activity.points.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                    <p class="block__p">{activity.method}</p>
+                    <h3 class="work__title">성과 · 변화</h3>
+                    <ul class="work__list">
+                      {activity.outcomes.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </section>
+            </>
+          ))
+        }
+
+        <section class="block" id="insight" aria-label="의미">
+          <div class="block__grid">
+            <h2 class="block__h">의미</h2>
+            <div>
+              {sharing.insight.map((p) => <p class="block__p">{p}</p>)}
+              <a class="text-link" href="/#sharing">홈으로 돌아가기</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

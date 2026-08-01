@@ -1,0 +1,258 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProject, publishedProjects } from '../../data/projects';
+import '../../styles/case.css';
+
+export function getStaticPaths() {
+  return publishedProjects.map((project) => ({
+    params: { slug: project.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const project = getProject(slug!);
+
+if (!project) {
+  return Astro.redirect('/');
+}
+
+const toc = [
+  { id: 'service', label: 'The service' },
+  { id: 'outcomes', label: 'Outcomes' },
+  { id: 'overview', label: 'This project' },
+  { id: 'problem', label: 'Problem' },
+  { id: 'background', label: 'Background' },
+  { id: 'work', label: 'What I did' },
+  { id: 'verification', label: 'Verification' },
+  { id: 'tooling', label: 'Tooling' },
+  { id: 'contribution', label: 'Contribution' },
+  { id: 'insight', label: 'Insight' },
+];
+
+const others = publishedProjects.filter((p) => p.slug !== project.slug);
+---
+
+<BaseLayout
+  title={`${project.shortTitle} · 김치운`}
+  description={project.oneLiner}
+>
+  <article class="case">
+    <div class="case__progress" aria-hidden="true">
+      <span data-progress></span>
+    </div>
+
+    <header class="case__hero">
+      <a class="case__back" href="/#projects">← Projects</a>
+      <div class="case__media">
+        <img
+          src={project.thumbnail}
+          alt=""
+          width="1600"
+          height="900"
+          loading="eager"
+          decoding="async"
+          style={`view-transition-name: project-${project.slug}`}
+        />
+      </div>
+      <div class="case__intro case-wrap">
+        <p class="meta">
+          {project.client} · {project.company} · {project.periodHint}
+        </p>
+        <h1 class="case__title">{project.title}</h1>
+        <p class="case__lead">{project.oneLiner}</p>
+        <p class="case__role">{project.role}</p>
+      </div>
+    </header>
+
+    <div class="case__layout case-wrap">
+      <nav class="toc" aria-label="목차">
+        <p class="toc__label">Contents</p>
+        <ol>
+          {
+            toc.map((item) => (
+              <li>
+                <a href={`#${item.id}`}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="case__main">
+        <section class="block" id="service" aria-label="서비스 소개">
+          <div class="block__grid">
+            <h2 class="block__h">The service</h2>
+            <div>
+              <p class="service__name">{project.service.name}</p>
+              <p class="service__tag">{project.service.tagline}</p>
+              {project.service.points.map((p) => <p class="block__p">{p}</p>)}
+            </div>
+          </div>
+        </section>
+
+        <section class="block" id="outcomes" aria-label="성과">
+          <div class="block__grid">
+            <h2 class="block__h">Outcomes</h2>
+            <ul class="outcomes">
+              {
+                project.outcomes.map((item) => (
+                  <li>
+                    <p class="outcomes__label">{item.label}</p>
+                    <p class="outcomes__change">
+                      <span>{item.before}</span>
+                      <span class="outcomes__arrow" aria-hidden="true">
+                        →
+                      </span>
+                      <strong>{item.after}</strong>
+                    </p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </section>
+
+        <div class="break" aria-hidden="true">
+          <img src={project.thumbnail} alt="" width="1600" height="900" loading="lazy" />
+        </div>
+
+        <section class="block" id="overview" aria-label="프로젝트 개요">
+          <div class="block__grid">
+            <h2 class="block__h">This project</h2>
+            <div>
+              {project.overview.map((p) => <p class="block__p">{p}</p>)}
+            </div>
+          </div>
+        </section>
+
+        <section class="block block--shift" id="problem" aria-label="문제">
+          <div class="block__grid">
+            <h2 class="block__h">Problem</h2>
+            <div>
+              {
+                project.problem.map((block) => (
+                  <div class="work">
+                    <h3 class="work__title">{block.heading}</h3>
+                    <ul class="work__list">
+                      {block.items.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="block" id="background" aria-label="배경">
+          <div class="block__grid">
+            <h2 class="block__h">Background</h2>
+            <div>
+              {project.background.map((p) => <p class="block__p">{p}</p>)}
+              {
+                project.questions && project.questions.length > 0 ? (
+                  <div class="work">
+                    <h3 class="work__title">QA로 던진 질문</h3>
+                    <ul class="work__list">
+                      {project.questions.map((q) => (
+                        <li>{q}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="block" id="work" aria-label="수행">
+          <div class="block__grid">
+            <h2 class="block__h">What I did</h2>
+            <div>
+              {
+                project.work.map((block) => (
+                  <div class="work">
+                    <h3 class="work__title">{block.title}</h3>
+                    <ul class="work__list">
+                      {block.items.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="block block--shift" id="verification" aria-label="검증">
+          <div class="block__grid">
+            <h2 class="block__h">Verification</h2>
+            <ul class="verify">
+              {
+                project.verification.map((row) => (
+                  <li>
+                    <span class="verify__area">{row.area}</span>
+                    <span class="verify__detail">{row.detail}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </section>
+
+        <section class="block" id="tooling" aria-label="도구">
+          <div class="block__grid">
+            <h2 class="block__h">Tooling</h2>
+            <ul class="tools">
+              {project.tooling.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section class="block" id="contribution" aria-label="기여">
+          <div class="block__grid">
+            <h2 class="block__h">Contribution</h2>
+            <ul class="work__list">
+              {project.contribution.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section class="block" id="insight" aria-label="인사이트">
+          <div class="block__grid">
+            <h2 class="block__h">Insight</h2>
+            <ul class="insights">
+              {project.insights.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section class="more" aria-label="다른 프로젝트">
+          <h2 class="block__h">More projects</h2>
+          <ul class="more__list">
+            {
+              others.map((p) => (
+                <li>
+                  <a href={`/projects/${p.slug}`}>
+                    <img
+                      src={p.thumbnail}
+                      alt=""
+                      width="640"
+                      height="360"
+                      loading="lazy"
+                      style={`view-transition-name: project-${p.slug}`}
+                    />
+                    <span>{p.shortTitle}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <a class="text-link" href="/#projects">프로젝트 목록으로</a>
+        </section>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

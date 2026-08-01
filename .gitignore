@@ -1,0 +1,28 @@
+# Dependencies & build
+node_modules/
+dist/
+.astro/
+.vercel/
+.netlify/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# Local design tooling
+.impeccable/
+
+# Intermediate portrait exports (keep final portrait.png)
+site/public/portrait-cut.png
+site/public/portrait-hard.png
+site/public/portrait-human.png
+site/public/portrait-original.png
+site/public/portrait-src.jpg
+.claude/settings.local.json

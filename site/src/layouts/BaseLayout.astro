@@ -1,0 +1,44 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = '김치운 · 품질을 설계하는 QA Engineer',
+  description = '김치운 — 품질을 설계하는 QA Engineer. Web3·거래소·디지털 트윈·AI SaaS · 지식 전수.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
+  </head>
+  <body>
+    <!--
+      THESIS: Cinema Frame — image-led scroll film, not resume checklist or empty minimal type.
+      OWN-WORLD: Mist #f4f5f7 / sheet #fff / ink #111318 / teal #1a5f7a / brass #c8a45a; Pretendard; large media + sticky scrub.
+      STORY: Recruiter sees who, proof numbers, featured case, crossed projects, career, sharing, contact.
+      FIRST VIEWPORT: Asymmetric portrait + name/headline/summary; no CTA strip.
+      FORM: Cinema Frame (plan A); seed carried from redesign brief.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <slot />
+    <script>
+      import '../scripts/cinema';
+    </script>
+  </body>
+</html>
