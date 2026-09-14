@@ -215,34 +215,55 @@ const featOut = featured?.outcomes[0];
       <!-- Capability: sharing + skills -->
       <div id="capability">
         <section class="sharing" id="sharing" aria-label="지식 전수" data-band="sheet">
-          <div class="wrap sharing__grid">
-            <div>
+          <div class="wrap">
+            <header class="sharing__head">
               <h2 class="section-label">지식 전수</h2>
               <p class="sharing__title">{sharing.title}</p>
               <p class="sharing__lead">{sharing.oneLiner}</p>
               <a class="text-link" href="/sharing">이야기 자세히 보기</a>
-            </div>
-            <ul class="sharing__list">
+            </header>
+
+            <div class="sharing__items">
               {
                 sharing.activities.map((a) => (
-                  <li data-reveal>
-                    <p class="sharing__status">{a.status}</p>
-                    <h3 class="sharing__name">{a.title}</h3>
-                    <p class="sharing__sum">{a.summary}</p>
+                  <article class="sharing__item" data-reveal>
+                    <a class="sharing__link" href={`/sharing#${a.slug}`} data-drift>
+                      <div class="sharing__media">
+                        <img
+                          src={a.thumbnail}
+                          alt=""
+                          width="640"
+                          height="360"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                      <div class="sharing__copy">
+                        <p class="meta">{a.status}</p>
+                        <h3 class="sharing__name">{a.title}</h3>
+                        {'talkTitle' in a && a.talkTitle ? (
+                          <p class="sharing__talk">{a.talkTitle}</p>
+                        ) : null}
+                        <p class="sharing__sum">{a.summary}</p>
+                        <span class="sharing__go">자세히</span>
+                      </div>
+                    </a>
                     {'href' in a && a.href ? (
-                      <a
-                        class="text-link"
-                        href={a.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {a.hrefLabel ?? '자세히'}
-                      </a>
+                      <p class="sharing__ext-wrap">
+                        <a
+                          class="text-link"
+                          href={a.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {a.hrefLabel ?? '자세히'} →
+                        </a>
+                      </p>
                     ) : null}
-                  </li>
+                  </article>
                 ))
               }
-            </ul>
+            </div>
           </div>
         </section>
 
@@ -897,10 +918,9 @@ const featOut = featured?.outcomes[0];
     padding: 4.5rem 0;
   }
 
-  .sharing__grid {
-    display: grid;
-    grid-template-columns: 1fr 1.15fr;
-    gap: 2.5rem 3rem;
+  .sharing__head {
+    max-width: 36rem;
+    margin-bottom: 3rem;
   }
 
   .sharing__title {
@@ -912,7 +932,6 @@ const featOut = featured?.outcomes[0];
 
   .sharing__lead {
     margin: 0 0 1.25rem;
-    max-width: 28rem;
     font-size: 0.95rem;
     color: var(--mute);
   }
@@ -925,41 +944,93 @@ const featOut = featured?.outcomes[0];
     text-underline-offset: 0.2em;
   }
 
-  .sharing__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .sharing__items {
     display: grid;
-    gap: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1.5rem;
+    align-items: start;
   }
 
-  .sharing__list li {
-    padding: 1.15rem 0;
-    border-top: 1px solid var(--line);
+  .sharing__item {
+    min-width: 0;
   }
 
-  .sharing__list li:last-child {
-    border-bottom: 1px solid var(--line);
+  .sharing__link {
+    display: grid;
+    gap: 0.95rem;
+    text-decoration: none;
+    color: inherit;
   }
 
-  .sharing__status {
-    margin: 0 0 0.3rem;
-    font-size: 0.75rem;
-    font-weight: 650;
+  .sharing__media {
+    overflow: hidden;
+    border-radius: 0.35rem;
+    border: 1px solid var(--line);
+    background: var(--mist);
+    aspect-ratio: 16 / 9;
+  }
+
+  .sharing__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.7s var(--ease-out);
+  }
+
+  .sharing__link:hover .sharing__media img {
+    transform: scale(1.04);
+  }
+
+  .sharing__copy .meta {
+    margin: 0 0 0.4rem;
     color: var(--teal);
+    font-weight: 650;
   }
 
   .sharing__name {
     margin: 0;
-    font-size: 1.05rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.3;
+  }
+
+  .sharing__talk {
+    margin: 0.4rem 0 0;
+    font-size: 0.86rem;
+    font-weight: 560;
+    color: var(--ink);
   }
 
   .sharing__sum {
-    margin: 0.45rem 0 0;
-    font-size: 0.9rem;
+    margin: 0.65rem 0 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
     color: var(--mute);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .sharing__go {
+    display: inline-block;
+    margin-top: 0.85rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--teal);
+  }
+
+  .sharing__ext-wrap {
+    margin: 0.55rem 0 0;
+  }
+
+  @media (max-width: 520px) {
+    .sharing__items {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
   }
 
   /* Skills */
