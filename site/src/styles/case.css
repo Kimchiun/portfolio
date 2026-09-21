@@ -490,14 +490,18 @@
   }
 
   .case .more__list a {
-    grid-template-columns: 4.5rem minmax(0, 1fr);
+    display: flex;
     align-items: center;
     gap: 0.85rem;
-    padding: 0.75rem 0;
+    padding: 0.7rem 0;
   }
 
   .case .more__list img {
-    aspect-ratio: 1;
+    width: 4.25rem;
+    height: 2.4rem;
+    flex: none;
+    aspect-ratio: auto;
+    object-fit: cover;
     border-radius: 0.25rem;
   }
 
