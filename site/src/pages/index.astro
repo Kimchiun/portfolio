@@ -245,21 +245,23 @@ const featOut = featured?.outcomes[0];
                           <p class="sharing__talk">{a.talkTitle}</p>
                         ) : null}
                         <p class="sharing__sum">{a.summary}</p>
-                        <span class="sharing__go">자세히</span>
                       </div>
                     </a>
-                    {'href' in a && a.href ? (
-                      <p class="sharing__ext-wrap">
+                    <div class="sharing__actions">
+                      <a class="sharing__go" href={`/sharing#${a.slug}`}>
+                        자세히
+                      </a>
+                      {'href' in a && a.href ? (
                         <a
-                          class="text-link"
+                          class="sharing__ext"
                           href={a.href}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
                           {a.hrefLabel ?? '자세히'} →
                         </a>
-                      </p>
-                    ) : null}
+                      ) : null}
+                    </div>
                   </article>
                 ))
               }
@@ -712,6 +714,10 @@ const featOut = featured?.outcomes[0];
     text-underline-offset: 0.22em;
   }
 
+  .feature__go::after {
+    content: " →";
+  }
+
   /* Cross projects */
   .cross {
     display: grid;
@@ -793,6 +799,12 @@ const featOut = featured?.outcomes[0];
     font-size: 0.88rem;
     font-weight: 600;
     color: var(--teal);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .cross__go::after {
+    content: " →";
   }
 
   /* Experience */
@@ -1015,11 +1027,27 @@ const featOut = featured?.outcomes[0];
   }
 
   .sharing__go {
-    display: inline-block;
-    margin-top: 0.85rem;
     font-size: 0.88rem;
     font-weight: 600;
     color: var(--teal);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .sharing__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.65rem 1.25rem;
+    margin-top: 0.85rem;
+  }
+
+  .sharing__ext {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--teal);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .sharing__ext-wrap {
@@ -1362,40 +1390,6 @@ const featOut = featured?.outcomes[0];
 
     .feature__link {
       min-height: 0;
-    }
-
-    .feature__go,
-    .cross__go,
-    .sharing__go {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      margin-top: 1.35rem;
-      min-height: 2.75rem;
-      padding: 0.55rem 0.95rem;
-      font-size: 0.92rem;
-      font-weight: 650;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-      border-radius: 0.3rem;
-    }
-
-    .feature__go {
-      color: #14161c;
-      background: #c5dce4;
-    }
-
-    .feature__go::after,
-    .cross__go::after,
-    .sharing__go::after {
-      content: "→";
-      font-weight: 500;
-    }
-
-    .cross__go,
-    .sharing__go {
-      color: #fff;
-      background: var(--teal);
     }
 
     .cross__item--offset {
